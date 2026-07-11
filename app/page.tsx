@@ -18,7 +18,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <div className="mb-10 flex items-center justify-between">
+      <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-neutral-900">
             Susan Lum

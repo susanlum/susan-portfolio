@@ -1,7 +1,41 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { CaseStudy, Project, Skill } from "@/lib/types";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("projects")
+    .select("title, tagline, cover_image_url")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (!data) return { title: "Project not found" };
+
+  return {
+    title: `${data.title} — Susan Lum`,
+    description: data.tagline,
+    openGraph: {
+      title: data.title,
+      description: data.tagline,
+      type: "article",
+      ...(data.cover_image_url ? { images: [data.cover_image_url] } : {}),
+    },
+    twitter: {
+      card: data.cover_image_url ? "summary_large_image" : "summary",
+      title: data.title,
+      description: data.tagline,
+    },
+  };
+}
 
 export default async function ProjectDetailPage({
   params,

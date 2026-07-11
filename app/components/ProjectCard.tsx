@@ -15,7 +15,7 @@ export function ProjectCard({
   skills: Skill[];
 }) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md">
+    <div className="group flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <Link href={`/projects/${project.id}`} className="block">
         <div className="aspect-video w-full overflow-hidden bg-neutral-100">
           {project.cover_image_url ? (
@@ -23,7 +23,7 @@ export function ProjectCard({
             <img
               src={project.cover_image_url}
               alt={project.title}
-              className="h-full w-full object-cover transition group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-neutral-300">

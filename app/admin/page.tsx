@@ -22,7 +22,7 @@ export default async function AdminPage({
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Admin</h1>
           <p className="mt-1 text-sm text-neutral-600">
@@ -62,8 +62,8 @@ export default async function AdminPage({
       )}
 
       {!error && projects.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
-          <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-600">
               <tr>
                 <th className="px-4 py-3 font-medium">Title</th>
