@@ -10,7 +10,12 @@ export async function writeAuditLog(
     payload?: unknown;
   },
 ) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { error } = await supabase.from("audit_logs").insert({
+    user_id: user?.id ?? null,
     action: entry.action,
     object_type: entry.object_type,
     object_id: entry.object_id,

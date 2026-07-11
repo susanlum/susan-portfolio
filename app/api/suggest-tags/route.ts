@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 import { suggestSkillTags } from "@/lib/openai";
 
@@ -11,6 +12,14 @@ export async function POST(request: Request) {
   }
 
   const supabase = await createClient();
+
+  const user = await getSessionUser(supabase);
+  if (!user) {
+    return NextResponse.json(
+      { ok: false, reason: "unauthorized" },
+      { status: 403 },
+    );
+  }
 
   const { data: project } = await supabase
     .from("projects")
@@ -33,6 +42,7 @@ export async function POST(request: Request) {
   }
 
   const rows = suggestions.map((t) => ({
+    user_id: user.id,
     project_id,
     tag: t.tag,
     tag_source: "openai" as const,

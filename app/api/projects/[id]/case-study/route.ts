@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 
 export async function PUT(
@@ -11,6 +12,14 @@ export async function PUT(
 
   const supabase = await createClient();
 
+  const user = await getSessionUser(supabase);
+  if (!user) {
+    return NextResponse.json(
+      { errors: { _form: "Log in to manage projects" } },
+      { status: 403 },
+    );
+  }
+
   const { data: existing } = await supabase
     .from("case_studies")
     .select("*")
@@ -18,6 +27,7 @@ export async function PUT(
     .maybeSingle();
 
   const fields = {
+    user_id: user.id,
     project_id: projectId,
     summary: body.summary || null,
     summary_source: "manual" as const,

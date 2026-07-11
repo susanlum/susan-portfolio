@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 
 const VALID_STATUSES = ["accepted", "rejected"];
@@ -16,6 +17,11 @@ export async function PATCH(
   }
 
   const supabase = await createClient();
+
+  const user = await getSessionUser(supabase);
+  if (!user) {
+    return NextResponse.json({ error: "Log in to manage tags" }, { status: 403 });
+  }
 
   const { data: before } = await supabase
     .from("skills")

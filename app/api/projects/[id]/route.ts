@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
 import { writeAuditLog } from "@/lib/audit";
 import { validateProjectInput } from "@/lib/validation";
 
@@ -16,6 +17,14 @@ export async function PATCH(
   }
 
   const supabase = await createClient();
+
+  const user = await getSessionUser(supabase);
+  if (!user) {
+    return NextResponse.json(
+      { errors: { _form: "Log in to manage projects" } },
+      { status: 403 },
+    );
+  }
 
   const { data: before } = await supabase
     .from("projects")
@@ -65,6 +74,14 @@ export async function DELETE(
 ) {
   const { id } = await params;
   const supabase = await createClient();
+
+  const user = await getSessionUser(supabase);
+  if (!user) {
+    return NextResponse.json(
+      { errors: { _form: "Log in to manage projects" } },
+      { status: 403 },
+    );
+  }
 
   const { data: before } = await supabase
     .from("projects")

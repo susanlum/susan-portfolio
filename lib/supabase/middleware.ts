@@ -37,7 +37,18 @@ export async function updateSession(request: NextRequest) {
     });
 
     // Refresh session so it doesn't expire while user is active
-    await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // /admin/* requires an active session; public pages stay open
+    if (!user && request.nextUrl.pathname.startsWith("/admin")) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.search = "";
+      return NextResponse.redirect(loginUrl);
+    }
+
     return response;
   } catch {
     // Never let an auth hiccup crash the entire edge middleware

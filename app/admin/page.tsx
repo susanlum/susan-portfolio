@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Project } from "@/lib/types";
 import { DeleteProjectButton } from "@/app/admin/DeleteProjectButton";
+import { LogoutButton } from "@/app/admin/LogoutButton";
 import { Toast } from "@/app/admin/Toast";
 
 export default async function AdminPage({
@@ -32,6 +33,7 @@ export default async function AdminPage({
           <Link href="/" className="text-sm text-neutral-500 hover:underline">
             View site
           </Link>
+          <LogoutButton />
           <Link
             href="/admin/new"
             className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
