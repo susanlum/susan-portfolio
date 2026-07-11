@@ -72,6 +72,14 @@ export function ProjectForm({ project }: { project?: Project }) {
       return;
     }
 
+    if (!isEdit && form.description.trim()) {
+      fetch("/api/suggest-tags", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ project_id: data.project.id }),
+      }).catch(() => {});
+    }
+
     router.push(`/admin?msg=${isEdit ? "updated" : "created"}`);
     router.refresh();
   }

@@ -95,6 +95,12 @@ export default async function AdminPage({
                       >
                         Case study
                       </Link>
+                      <Link
+                        href={`/admin/${project.id}/tags`}
+                        className="text-sm font-medium text-neutral-700 hover:underline"
+                      >
+                        Tags
+                      </Link>
                       <DeleteProjectButton
                         projectId={project.id}
                         projectTitle={project.title}
